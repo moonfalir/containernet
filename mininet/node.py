@@ -2054,6 +2054,24 @@ class NOX( Controller ):
                              ' '.join( noxArgs ),
                              cdir=noxCoreDir,
                              **kwargs )
+class POX( Controller ):
+    "Controller to run a POX application."
+
+    def __init__ (self, name, *poxArgs, **kwargs):
+        """Init.
+           name: name to give controller
+           poxArgs: arguments (strings) to pass to POX"""
+        if not poxArgs:
+            warn( 'warning: no POX modules specified; '
+                  'running forwarding.l2_learning\n' )
+            poxArgs = [ 'openflow.of_01', '--port=%d', 'forwarding.l2_learning' ]
+        elif type( poxArgs ) not in ( list, tuple ):
+            poxArgs = [ 'openflow.of_01', '--port=%d', poxArgs ]
+
+        Controller.__init__( self, name,
+                             command='../pox/pox.py ',
+                             cargs=' '.join(poxArgs),
+                             **kwargs )
 
 class Ryu( Controller ):
     "Controller to run Ryu application"
