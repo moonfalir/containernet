@@ -11,7 +11,7 @@ setLogLevel('info')
 
 net = Containernet(controller=POX)
 info('*** Adding controller\n')
-net.addController('c0', 'forwarding.l2_learning')
+net.addController('c0', poxArgs = 'forwarding.l2_learning')
 info('*** Adding docker containers\n')
 d1 = net.addDocker('d1', ip='10.0.0.251', dimage="ubuntu:trusty")
 d2 = net.addDocker('d2', ip='10.0.0.252', dimage="ubuntu:trusty")

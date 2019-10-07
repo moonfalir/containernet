@@ -2061,12 +2061,12 @@ class POX( Controller ):
         """Init.
            name: name to give controller
            poxArgs: arguments (strings) to pass to POX"""
-        if not poxArgs:
+        if 'poxArgs' not in kwargs:
             warn( 'warning: no POX modules specified; '
                   'running forwarding.l2_learning\n' )
             poxArgs = [ 'openflow.of_01', '--port=%d', 'forwarding.l2_learning' ]
-        elif type( poxArgs ) not in ( list, tuple ):
-            poxArgs = [ 'openflow.of_01', '--port=%d', poxArgs ]
+        else:
+            poxArgs = [ 'openflow.of_01', '--port=%d', kwargs['poxArgs'] ]
 
         Controller.__init__( self, name,
                              command='../pox/pox.py ',
