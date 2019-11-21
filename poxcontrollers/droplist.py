@@ -121,7 +121,7 @@ class DropListSwitch (object):
         def checkDropList():
             if packet.type == ethpkt.IP_TYPE:
                 ip_packet = packet.payload
-                if ip_packet.protocol == ippkt.UDP_PROTOCOL:
+                if ip_packet.protocol == ippkt.UDP_PROTOCOL or ip_packet.protocol == ippkt.TCP_PROTOCOL:
                     if self.client.src_ip == ip_packet.srcip: #2
                         self.client.counter += 1
                         if str(self.client.counter) in self.client.droplist: #2a
