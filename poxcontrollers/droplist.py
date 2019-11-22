@@ -15,7 +15,7 @@ _flood_delay = 0
 class DropListPerNode (object):
     def __init__(self, src_ip, droplist):
         self.src_ip = src_ip
-        self.droplist = droplist
+        self.droplist = droplist.split(",")
         self.counter = 0
 
 class DropListSwitch (object):
