@@ -3,15 +3,17 @@
 This is the most simple example to showcase Containernet.
 """
 from mininet.net import Containernet
-from mininet.node import POX
+from mininet.node import POX, RemoteController
 from mininet.cli import CLI
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
 setLogLevel('info')
 
-net = Containernet(controller=POX)
+#net = Containernet(controller=POX)
+net = Containernet()
 info('*** Adding controller\n')
-net.addController('c0', poxArgs = 'forwarding.droplist --droplist_client=1,3,4 --droplist_server=5')
+#net.addController('c0', poxArgs = 'forwarding.droplist')
+net.addController('c0', controller=RemoteController, ip='127.0.0.1', port=6653)
 info('*** Adding docker containers\n')
 d1 = net.addDocker('d1', ip='10.0.0.251', dimage="tcpebpf")
 d2 = net.addDocker('d2', ip='10.0.0.252', dimage="tcpebpf")
