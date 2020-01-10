@@ -748,7 +748,9 @@ class Docker ( Host ):
                      'ports': [],
                      'dns': [],
                      'ipc_mode': None,
-                     'devices': []
+                     'devices': [],
+                     'cap_add': [],
+                     'sysctls': {}
                      }
         defaults.update( kwargs )
 
@@ -773,6 +775,8 @@ class Docker ( Host ):
         self.dns = defaults['dns']
         self.ipc_mode = defaults['ipc_mode']
         self.devices = defaults['devices']
+        self.cap_add = defaults['cap_add']
+        self.sysctls = defaults['sysctls']
 
         # setup docker client
         # self.dcli = docker.APIClient(base_url='unix://var/run/docker.sock')
@@ -800,7 +804,10 @@ class Docker ( Host ):
             cpuset_cpus=self.resources.get('cpuset_cpus'),
             dns=self.dns,
             ipc_mode=self.ipc_mode,  # string
-            devices=self.devices  # see docker-py docu
+            devices=self.devices,  # see docker-py docu
+            cap_add=self.cap_add,  # see docker-py docu
+            sysctls=self.sysctls   # see docker-py docu
+            
         )
 
         if kwargs.get("rm", False):
@@ -1056,15 +1063,12 @@ class Docker ( Host ):
         Checks if the repo:tag image exists locally
         :return: True if the image exists locally. Else false.
         """
-        # filter by repository
-        images = self.dcli.images(repo)
-        imageName = "%s:%s" % (repo, tag)
-
+        images = self.dcli.images()
+        imageTag = "%s:%s" % (repo, tag)
         for image in images:
-            if 'RepoTags' in image:
-                if image['RepoTags'] is None:
-                    return False
-                if imageName in image['RepoTags']:
+            if image.get("RepoTags"):
+                if imageTag in image.get("RepoTags", []):
+                    debug("Image '{}' exists.\n".format(imageTag))
                     return True
         return False
 
